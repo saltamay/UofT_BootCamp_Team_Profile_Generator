@@ -1,4 +1,7 @@
 const inquirer = require('inquirer');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
 class App {
     constructor() {
@@ -108,15 +111,40 @@ class App {
         return employeeInfo;
     }
 
-    saveEmployeeToDb(employeeInfo) {
+    createEmployee(employeeInfo) {
+        let employee;
+        const { id, name, email } = employeeInfo;
         switch (employeeInfo.title.toLowerCase()) {
             case 'manager':
-                this.db.manager = { ...employeeInfo }
+                const manager = new Manager(id, name, email, employeeInfo.officeNumber);
+                employee = manager;
                 break;
             case 'engineer':
-                this.db.engineers.push(employeeInfo);
+                const engineer = new Engineer(id, name, email, employeeInfo.github);
+                employee = engineer;
+                break;
             case 'intern':
-                this.db.interns.push(employeeInfo);
+                const intern = new Intern(id, name, email, employeeInfo.school);
+                employee = intern;
+                break;
+            default:
+                break;
+        }
+
+        return employee;
+    }
+
+    saveEmployeeToDb(employee) {
+        switch (employee.getRole().toLowerCase()) {
+            case 'manager':
+                this.db.manager = employee;
+                break;
+            case 'engineer':
+                this.db.engineers.push(employee);
+                break;
+            case 'intern':
+                this.db.interns.push(employee);
+                break;
             default:
                 break;
         }
@@ -124,7 +152,9 @@ class App {
 
     async init() {
 
-        this.saveEmployeeToDb(await this.getEmployeeInfo());
+        const employee = this.createEmployee(await this.getEmployeeInfo());
+
+        this.saveEmployeeToDb(employee);
 
         console.log(this.db);
     }
