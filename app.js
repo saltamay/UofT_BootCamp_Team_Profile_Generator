@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 
 class App {
     constructor() {
-        this.data = {
+        this.db = {
             manager: {
                 id: null,
                 email: null,
@@ -13,110 +13,123 @@ class App {
         }
     }
 
-    getEmployeeInfo() {
+    async getEmployeeInfo() {
 
         console.log(`\nPlease enter employee information:\n`);
         // let employeeInfo =
-        inquirer
-            .prompt([
-                {
-                    type: "input",
-                    message: "ID: ",
-                    name: "id"
-                },
-                {
-                    type: "input",
-                    message: "Name: ",
-                    name: "name"
-                },
-                {
-                    type: "input",
-                    message: "Email: ",
-                    name: "email"
-                },
-                {
-                    type: "input",
-                    message: "Title: ",
-                    name: "title"
-                }
-            ])
-            .then(employeeInfo => {
+        let employeeInfo =
+            await inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        message: "ID: ",
+                        name: "id"
+                    },
+                    {
+                        type: "input",
+                        message: "Name: ",
+                        name: "name"
+                    },
+                    {
+                        type: "input",
+                        message: "Email: ",
+                        name: "email"
+                    },
+                    {
+                        type: "input",
+                        message: "Title: ",
+                        name: "title"
+                    }
+                ]);
 
-                switch (employeeInfo.title.toLowerCase()) {
-                    case 'manager':
-                        this.getOfficeNumber(employeeInfo);
-                        break;
-                    case 'engineer':
-                        this.getGithubHandle(employeeInfo);
-                        break;
-                    case 'intern':
-                        this.getSchoolInfo(employeeInfo);
-                        break;
-                    default:
-                        break;
-                }
-            })
+        switch (employeeInfo.title.toLowerCase()) {
+            case 'manager':
+                employeeInfo = await this.getOfficeNumber(employeeInfo);
+                break;
+            case 'engineer':
+                employeeInfo = await this.getGithubHandle(employeeInfo);
+                break;
+            case 'intern':
+                employeeInfo = await this.getSchoolInfo(employeeInfo);
+                break;
+            default:
+                break;
 
+        }
+
+        return employeeInfo;
     }
 
-    getOfficeNumber(managerInfo) {
-        inquirer
-            .prompt([
-                {
-                    type: "input",
-                    message: "Office Number: ",
-                    name: "officeNumber"
-                }
-            ])
-            .then(input => {
-                managerInfo.officeNumber = input.officeNumber;
-                return managerInfo;
-            })
-            .then(managerInfo => {
-                console.log(managerInfo)
-                return managerInfo;
-            })
+    async getOfficeNumber(employeeInfo) {
+        const managerInfo =
+            await inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        message: "Office Number: ",
+                        name: "officeNumber"
+                    }
+                ])
+
+        employeeInfo.officeNumber = await managerInfo.officeNumber;
+
+        return employeeInfo;
     }
 
-    getGithubHandle(engineerInfo) {
-        inquirer
-            .prompt([
-                {
-                    type: "input",
-                    message: "GitHub handle: ",
-                    name: "github"
-                }
-            ])
-            .then(input => {
-                engineerInfo.github = input.github;
-                return engineerInfo;
-            })
-            .then(engineerInfo => {
-                console.log(engineerInfo)
-                return engineerInfo;
-            })
+    async getGithubHandle(employeeInfo) {
+        let engineerInfo =
+            await inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        message: "GitHub handle: ",
+                        name: "github"
+                    }
+                ]);
+
+        employeeInfo.github = await engineerInfo.github;
+
+        return employeeInfo;
     }
 
-    getSchoolInfo(internInfo) {
-        inquirer
-            .prompt([
-                {
-                    type: "input",
-                    message: "School: ",
-                    name: "school"
-                }
-            ])
-            .then(input => {
-                internInfo.school = input.school;
-                return internInfo;
-            })
-            .then(internInfo => {
-                console.log(internInfo)
-                return internInfo;
-            })
+    async getSchoolInfo(employeeInfo) {
+        let internInfo =
+            await inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        message: "School: ",
+                        name: "school"
+                    }
+                ]);
+
+        employeeInfo.school = internInfo.school;
+
+        return employeeInfo;
+    }
+
+    saveEmployeeToDb(employeeInfo) {
+        switch (employeeInfo.title.toLowerCase()) {
+            case 'manager':
+                this.db.manager = { ...employeeInfo }
+                break;
+            case 'engineer':
+                this.db.engineers.push(employeeInfo);
+            case 'intern':
+                this.db.interns.push(employeeInfo);
+            default:
+                break;
+        }
+    }
+
+    async init() {
+
+        this.saveEmployeeToDb(await this.getEmployeeInfo());
+
+        console.log(this.db);
     }
 }
 
 const app = new App();
 
-app.getEmployeeInfo()
+app.init();
