@@ -6,11 +6,7 @@ const Intern = require('./lib/Intern');
 class App {
     constructor() {
         this.db = {
-            manager: {
-                id: null,
-                email: null,
-                officeNumber: null,
-            },
+            manager: null,
             engineers: [], // Array of engineer object instances,
             interns: [], // Also array of intern object intances
         }
@@ -19,7 +15,7 @@ class App {
     async getEmployeeInfo() {
 
         console.log(`\nPlease enter employee information:\n`);
-        // let employeeInfo =
+
         let employeeInfo =
             await inquirer
                 .prompt([
@@ -152,9 +148,25 @@ class App {
 
     async init() {
 
-        const employee = this.createEmployee(await this.getEmployeeInfo());
+        let input = '';
 
-        this.saveEmployeeToDb(employee);
+        do {
+
+            const employee = this.createEmployee(await this.getEmployeeInfo());
+
+            this.saveEmployeeToDb(employee);
+
+            input =
+                await inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            message: "Type 'yes' if you wish to exit",
+                            name: "exit"
+                        }
+                    ]);
+
+        } while (!input.exit);
 
         console.log(this.db);
     }
