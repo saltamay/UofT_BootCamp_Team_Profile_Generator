@@ -118,15 +118,15 @@ class App {
         const { id, name, email } = employeeInfo;
         switch (employeeInfo.title.toLowerCase()) {
             case 'manager':
-                const manager = new Manager(id, name, email, employeeInfo.officeNumber);
+                const manager = new Manager(name, id, email, employeeInfo.officeNumber);
                 employee = manager;
                 break;
             case 'engineer':
-                const engineer = new Engineer(id, name, email, employeeInfo.github);
+                const engineer = new Engineer(name, id, email, employeeInfo.github);
                 employee = engineer;
                 break;
             case 'intern':
-                const intern = new Intern(id, name, email, employeeInfo.school);
+                const intern = new Intern(name, id, email, employeeInfo.school);
                 employee = intern;
                 break;
             default:
@@ -154,25 +154,31 @@ class App {
 
     createTeamRoster() {
 
-        let managerProfile = new ManagerProfile(this.db.manager);
-        managerProfile = managerProfile.createProfile();
-
+        let managerProfile = '';
         let engineers = '';
-
-        for (const engineer of this.db.engineers) {
-            let engineerProfile = new EngineerProfile(engineer);
-            engineerProfile = engineerProfile.createProfile();
-
-            engineers += engineerProfile;
-        }
-
         let interns = '';
 
-        for (const intern of this.db.interns) {
-            let internProfile = new InternProfile(intern);
-            internProfile = internProfile.createProfile();
+        if (this.db.manager) {
+            managerProfile = new ManagerProfile(this.db.manager);
+            managerProfile = managerProfile.createProfile();
+        }
 
-            engineers += internProfile;
+        if (this.db.engineers) {
+            for (const engineer of this.db.engineers) {
+                let engineerProfile = new EngineerProfile(engineer);
+                engineerProfile = engineerProfile.createProfile();
+
+                engineers += engineerProfile;
+            }
+        }
+
+        if (this.db.interns) {
+            for (const intern of this.db.interns) {
+                let internProfile = new InternProfile(intern);
+                internProfile = internProfile.createProfile();
+
+                engineers += internProfile;
+            }
         }
 
         const team = managerProfile + engineers + interns;
