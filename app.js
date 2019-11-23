@@ -183,6 +183,24 @@ class App {
         return teamRoster;
     }
 
+    createServer(teamRoster) {
+
+        fs.writeFile('./public/team.html', teamRoster, function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+
+
+        http.createServer(function (req, res) {
+            fs.readFile('./public/team.html', function (err, data) {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.write(data);
+                res.end();
+            });
+
+        }).listen(8080);
+    }
+
     async init() {
 
         let input = '';
@@ -207,20 +225,7 @@ class App {
 
         const teamRoster = this.createTeamRoster();
 
-        fs.writeFile('./public/team.html', teamRoster, function (err) {
-            if (err) throw err;
-            console.log('Saved!');
-        });
-
-
-        http.createServer(function (req, res) {
-            fs.readFile('./public/team.html', function (err, data) {
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.write(data);
-                res.end();
-            });
-
-        }).listen(8080);
+        this.createServer(teamRoster);
     }
 }
 

@@ -1,15 +1,18 @@
-class ManagerProfile {
+const EmployeeProfile = require('./EmployeeProfile');
+
+class ManagerProfile extends EmployeeProfile {
 
     constructor(manager) {
 
-        this.id = manager.id;
-        this.name = manager.name;
-        this.email = manager.email;
-        this.phone = manager.officeNumber
+        super(manager);
+        this.officeNumber = manager.officeNumber;
 
         this.html =
             `<div class="col col-md-6 col-lg-6 col-xl-4">
             <div class="card">
+            <div class="badge badge-info mt-3 p-3">
+            <span class="employee-title">Manager</span>
+            </div>
             <img src="./img/manager.svg" class="card-img-top mt-5 img-fluid rounded mx-auto d-block"
                 alt="Employee Image" style="width: 50%;">
             <div class="card-body">
@@ -25,10 +28,6 @@ class ManagerProfile {
             </div>
             </div>
             `;
-    }
-
-    createProfile() {
-        return this.html;
     }
 }
 
