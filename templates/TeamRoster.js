@@ -19,7 +19,6 @@ class TeamRoster {
             font-size: 1.15rem;
         }
         .badge {
-            height: 40px;
             width: 50%;
         }
         </style>

@@ -17,7 +17,6 @@ class ManagerProfile extends EmployeeProfile {
                 alt="Employee Image" style="width: 50%;">
             <div class="card-body">
             <h3 class="card-title">${this.name}</h3>
-            <h5 class="card-subtitle">Manager</h5>
             <ul class="card-text list-group">
             <li class="list-group-item"><span class="font-weight-bold">ID:</span> ${this.id}</li>
             <li class="list-group-item"><span class="font-weight-bold">Email:</span> ${this.email}</li>
