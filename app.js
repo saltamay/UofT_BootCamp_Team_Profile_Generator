@@ -5,6 +5,8 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const ManagerProfile = require('./templates/ManagerProfile');
+const EngineerProfile = require('./templates/EngineerProfile');
+const InternProfile = require('./templates/InternProfile');
 const TeamRoster = require('./templates/TeamRoster');
 
 class App {
@@ -150,6 +152,37 @@ class App {
         }
     }
 
+    createTeamRoster() {
+
+        let managerProfile = new ManagerProfile(this.db.manager);
+        managerProfile = managerProfile.createProfile();
+
+        let engineers = '';
+
+        for (const engineer of this.db.engineers) {
+            let engineerProfile = new EngineerProfile(engineer);
+            engineerProfile = engineerProfile.createProfile();
+
+            engineers += engineerProfile;
+        }
+
+        let interns = '';
+
+        for (const intern of this.db.interns) {
+            let internProfile = new InternProfile(intern);
+            internProfile = internProfile.createProfile();
+
+            engineers += internProfile;
+        }
+
+        const team = managerProfile + engineers + interns;
+
+        let teamRoster = new TeamRoster(team);
+        teamRoster = teamRoster.createTeamRoster();
+
+        return teamRoster;
+    }
+
     async init() {
 
         let input = '';
@@ -172,12 +205,9 @@ class App {
 
         } while (!input.exit);
 
-        let manager = new ManagerProfile(this.db.manager);
-        manager = manager.createProfile();
+        const teamRoster = this.createTeamRoster();
 
-        const teamRoster = new TeamRoster(manager);
-
-        fs.writeFile('./public/team.html', teamRoster.createTeamRoster(), function (err) {
+        fs.writeFile('./public/team.html', teamRoster, function (err) {
             if (err) throw err;
             console.log('Saved!');
         });
@@ -191,8 +221,6 @@ class App {
             });
 
         }).listen(8080);
-
-        // console.log(this.db);
     }
 }
 
