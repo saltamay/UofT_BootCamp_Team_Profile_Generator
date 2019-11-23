@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const ManagerProfile = require('./templates/ManagerProfile');
 
 class App {
     constructor() {
@@ -167,6 +168,17 @@ class App {
                     ]);
 
         } while (!input.exit);
+
+        const manager = new ManagerProfile(this.db.manager);
+
+        http.createServer(function (req, res) {
+            fs.readFile('./public/team.html', function (err, data) {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.write(data);
+                res.end();
+            });
+
+        }).listen(8080);
 
         console.log(this.db);
     }
