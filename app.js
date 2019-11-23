@@ -1,8 +1,11 @@
+const fs = require('fs');
+const http = require('http');
 const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const ManagerProfile = require('./templates/ManagerProfile');
+const TeamRoster = require('./templates/TeamRoster');
 
 class App {
     constructor() {
@@ -169,7 +172,16 @@ class App {
 
         } while (!input.exit);
 
-        const manager = new ManagerProfile(this.db.manager);
+        let manager = new ManagerProfile(this.db.manager);
+        manager = manager.createProfile();
+
+        const teamRoster = new TeamRoster(manager);
+
+        fs.writeFile('./public/team.html', teamRoster.createTeamRoster(), function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+
 
         http.createServer(function (req, res) {
             fs.readFile('./public/team.html', function (err, data) {
@@ -180,7 +192,7 @@ class App {
 
         }).listen(8080);
 
-        console.log(this.db);
+        // console.log(this.db);
     }
 }
 

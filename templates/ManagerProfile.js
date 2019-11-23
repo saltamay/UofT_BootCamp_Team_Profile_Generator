@@ -7,7 +7,7 @@ class ManagerProfile {
         this.email = manager.email;
         this.phone = manager.officeNumber
 
-        this.profile =
+        this.html =
             `<div class="col col-md-6 col-lg-6 col-xl-4">
             <div class="card">
             <img src="./img/manager.svg" class="card-img-top mt-5 img-fluid rounded mx-auto d-block"
@@ -28,7 +28,7 @@ class ManagerProfile {
     }
 
     createProfile() {
-        return this.profile;
+        return this.html;
     }
 }
 

@@ -1,4 +1,9 @@
+class TeamRoster {
+    constructor(team) {
+        this.team = team;
 
+        this.html =
+            `
         <!doctype html>
         <html lang="en">
         <head>
@@ -14,23 +19,7 @@
         <h1 class="text-center">Meet The Team</h1>
         <div class="container">
         <div id="root" class="row">
-        <div class="col col-md-6 col-lg-6 col-xl-4">
-            <div class="card">
-            <img src="./img/manager.svg" class="card-img-top mt-5 img-fluid rounded mx-auto d-block"
-                alt="Employee Image" style="width: 50%;">
-            <div class="card-body">
-            <h3 class="card-title">Sal</h3>
-            <h5 class="card-subtitle">Manager</h5>
-            <ul class="card-text list-group">
-            <li class="list-group-item"><span class="font-weight-bold">ID:</span> 1</li>
-            <li class="list-group-item"><span class="font-weight-bold">Email:</span> sal.tamay</li>
-            <li class="list-group-item"><span class="font-weight-bold">Office Phone: </span> undefined</li>
-            </ul>
-            <a href="#" class="mt-3 btn btn-info btn-block">Contact</a>
-            </div>
-            </div>
-            </div>
-            
+        ${this.team}
         </div>
         </div>
         <!-- Optional JavaScript -->
@@ -46,4 +35,13 @@
             crossorigin="anonymous"></script>
         </body>
         </html> 
-        
+        `;
+    }
+
+    createTeamRoster() {
+        return this.html;
+    }
+}
+
+module.exports = TeamRoster;
+
