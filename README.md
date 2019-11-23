@@ -1,4 +1,4 @@
-# UofT Full-Stack Web Development Bootcamp Project #8: Template Engine - Employee Summary
+# UofT Full-Stack Web Development Bootcamp Project #8: Template Engine - Team Profile Generator
 
 A software engineering team generator command line application
 
